@@ -69,6 +69,7 @@
   .opt-item:hover { border-color: var(--gold); background: #fff8ef; }
   .opt-item.selected { border-color: var(--gold); background: #fff3e0; font-weight: 500; color: var(--rust); }
   .opt-item input { display: none; }
+  .opt-item { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
   .opt-dot { width: 16px; height: 16px; border: 2px solid var(--border); border-radius: 50%; flex-shrink: 0; transition: all 0.18s; position: relative; margin-top: 2px; }
   .opt-item.selected .opt-dot { border-color: var(--gold); background: var(--gold); }
   .opt-item.selected .opt-dot::after { content: ''; position: absolute; inset: 3px; background: #fff; border-radius: 50%; }
@@ -694,6 +695,8 @@
   document.addEventListener('click', function(e) {
     const item = e.target.closest('.opt-item');
     if (item) {
+      e.preventDefault();
+      e.stopPropagation();
       const grid = item.closest('[data-type]');
       if (!grid) return;
       if (grid.dataset.type === 'radio') {
@@ -702,9 +705,13 @@
       } else {
         item.classList.toggle('selected');
       }
+      return;
     }
     const card = e.target.closest('.model-card');
-    if (card) card.classList.toggle('selected');
+    if (card) {
+      e.preventDefault();
+      card.classList.toggle('selected');
+    }
   });
 
   function navigate(dir) {
